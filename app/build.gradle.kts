@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id ("io.realm.kotlin")
 }
 
 android {
@@ -66,4 +67,19 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // Mongo Realm
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation ("io.realm.kotlin:library-sync:1.6.0")
+
+    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
+
+    // Desugar JDK
+    coreLibraryDesugaring ("com.android.tools:desugar_jdk_libs:2.0.2")
+
+    // Message Bar Compose
+    implementation ("com.github.stevdza-san:MessageBarCompose:1.0.5")
+
+    // One-Tap Compose
+    implementation ("com.github.stevdza-san:OneTapCompose:1.0.0")
 }
