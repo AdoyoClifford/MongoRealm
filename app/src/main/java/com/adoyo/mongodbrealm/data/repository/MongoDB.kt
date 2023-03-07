@@ -1,5 +1,6 @@
 package com.adoyo.mongodbrealm.data.repository
 
+import android.util.Log
 import com.adoyo.mongodbrealm.model.Address
 import com.adoyo.mongodbrealm.model.Person
 import com.adoyo.mongodbrealm.model.Pet
@@ -45,14 +46,43 @@ object MongoDB : MongoRepository {
     }
 
     override suspend fun insertPerson(person: Person) {
-        TODO("Not yet implemented")
+        if (user != null) {
+            realm.write {
+                try {
+                    copyToRealm(person.apply { owner_id = user.id })
+                } catch (e: Exception) {
+                    Log.d("MongoRepository",e.message.toString())
+                }
+            }
+        }
     }
 
     override suspend fun updatePerson(person: Person) {
-        TODO("Not yet implemented")
+        realm.write {
+            val queriedPerson =
+                query<Person>(query = "_id == $0",person._id)
+                    .first()
+                    .find()
+            if (queriedPerson != null) {
+                queriedPerson.name = person.name
+            } else {
+                Log.d("MongoRepository", "Queried Person does not exist")
+            }
+        }
     }
 
     override suspend fun deletePerson(id: ObjectId) {
-        TODO("Not yet implemented")
+        realm.write {
+            try {
+                val person = query<Person>(query = "_id == $0",id)
+                    .first()
+                    .find()
+                person?.let {
+                    delete(it)
+                }
+            } catch (e: Exception) {
+                Log.d("MongoRepository", "${e.message}")
+            }
+        }
     }
 }
