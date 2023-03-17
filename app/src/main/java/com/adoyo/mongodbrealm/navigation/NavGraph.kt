@@ -20,7 +20,11 @@ fun SetUpNavGraph(
     navController: NavHostController
 ) {
     NavHost(navController = navController, startDestination = startDestination) {
-
+        authRoute (navigateToHome = {
+            navController.popBackStack()
+            navController.navigate(Screens.Home.route)
+        })
+        homeRoute()
     }
 
 
