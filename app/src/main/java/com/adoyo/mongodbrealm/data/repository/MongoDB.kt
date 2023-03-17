@@ -20,7 +20,7 @@ object MongoDB : MongoRepository {
     private lateinit var realm: Realm
 
     init {
-
+        configureTheRealm()
     }
 
     override fun configureTheRealm() {
@@ -42,7 +42,7 @@ object MongoDB : MongoRepository {
     }
 
     override fun filterData(name: String): Flow<List<Person>> {
-        return realm.query<Person>(query = "name CONTAINS[c] $0",name).asFlow().map { it.list }
+        return realm.query<Person>(query = "name CONTAINS[c] $0", name).asFlow().map { it.list }
     }
 
     override suspend fun insertPerson(person: Person) {
@@ -51,7 +51,7 @@ object MongoDB : MongoRepository {
                 try {
                     copyToRealm(person.apply { owner_id = user.id })
                 } catch (e: Exception) {
-                    Log.d("MongoRepository",e.message.toString())
+                    Log.d("MongoRepository", e.message.toString())
                 }
             }
         }
@@ -60,7 +60,7 @@ object MongoDB : MongoRepository {
     override suspend fun updatePerson(person: Person) {
         realm.write {
             val queriedPerson =
-                query<Person>(query = "_id == $0",person._id)
+                query<Person>(query = "_id == $0", person._id)
                     .first()
                     .find()
             if (queriedPerson != null) {
@@ -74,7 +74,7 @@ object MongoDB : MongoRepository {
     override suspend fun deletePerson(id: ObjectId) {
         realm.write {
             try {
-                val person = query<Person>(query = "_id == $0",id)
+                val person = query<Person>(query = "_id == $0", id)
                     .first()
                     .find()
                 person?.let {

@@ -26,8 +26,6 @@ fun SetUpNavGraph(
         })
         homeRoute()
     }
-
-
 }
 
 fun NavGraphBuilder.authRoute(navigateToHome: () -> Unit) {
